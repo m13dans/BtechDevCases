@@ -1,62 +1,123 @@
-# Take-home Assignment: Auth with JWT (TypeScript)
+# SimpleAuth
 
-Build a small application in **TypeScript/Go/C#** that supports user **registration** and **login** using **JWT**.
-You can choose any stack or structure you want.
-As long as the core auth flow works end-to-end, it’s accepted.
+SimpleAuth is a full-stack authentication sample built with:
 
----
+- .NET 10 ASP.NET Core API
+- React frontend (Vite + React Router)
+- PostgreSQL database
+- Docker Compose for local development and orchestration
 
-## Requirements
+This project implements a basic authentication flow with user registration, login, JWT-based authorization, and an authenticated protected page.
 
-### 1. Register
+## Tech Stack
 
-- Fields: `email`, `password`, `confirmPassword`
+- Backend: .NET 10, ASP.NET Core Minimal API
+- Frontend: React, Vite, TypeScript
+- Database: PostgreSQL 18
+- Containerization: Docker Compose
 
-### 2. Login
+## Project Structure
 
-- Input: `email`, `password`
-- Return: **JWT**
-- Token should contain at least:
+- `SimpleAuth/` - Docker Compose and environment configuration
+- `SimpleAuth/SimpleAuthAPI/` - .NET 10 backend API
+- `SimpleAuth/simple-auth-ui/` - React frontend application
 
-  - `email`
-  - `user id` or similar identifier
+## Features
 
-### 3. Authenticated View / Endpoint
+- User registration
+- User login
+- JWT token generation and validation
+- Protected route / authenticated view
+- PostgreSQL persistence
+- Docker-based local setup
 
-After successful login, calling the protected route / loading the protected screen should show:
+## Required Environment Variables
 
+Create a `.env` file inside the `SimpleAuth` directory before running Docker Compose.
+
+Example:
+
+```env
+DB_DATABASE=simpleauth
+DB_USER=postgres
+DB_PASSWORD=your_secure_password
+JWT_SECRET=change_this_to_a_long_random_secret
+JWT_ISSUER=simpleauth-api
+JWT_AUDIENCE=simpleauth-frontend
+FRONTEND_SITE=http://localhost:3000
 ```
-Hello [email], welcome back
+
+### Variable explanation
+
+- `DB_DATABASE`: PostgreSQL database name
+- `DB_USER`: PostgreSQL username
+- `DB_PASSWORD`: PostgreSQL password
+- `JWT_SECRET`: Secret key used to sign JWT tokens
+- `JWT_ISSUER`: JWT issuer value expected by the API
+- `JWT_AUDIENCE`: JWT audience value expected by the API
+- `FRONTEND_SITE`: Allowed frontend origin for CORS in production mode
+
+> The backend reads these values from the environment and injects them into the application configuration.
+
+## Run with Docker Compose
+
+From the project root folder:
+
+```bash
+cd SimpleAuth
+docker compose --env-file .env up --build
 ```
 
-user should be logged out after 15 minutes of inacitvity
+This will start the following services:
 
----
+- API: http://localhost:5000
+- Frontend: http://localhost:3000
+- PostgreSQL: localhost:5434
 
-## What to deliver
+## Services Overview
 
-- Fork this repository and then send the link
-- A runnable project (any structure).
-- README explaining:
+### Backend API
 
-  - How to build and run it (prepare docker compose)
-  - Required environment variables
+The .NET 10 API is built from `SimpleAuthAPI/Dockerfile` and runs on port `5000` mapped to container port `8080`.
 
----
+It:
 
-## Acceptance criteria
+- connects to PostgreSQL using `ConnectionStrings__Database`
+- validates JWT tokens using `Jwt:Secret`, `Jwt:Issuer`, and `Jwt:Audience`
+- applies database migrations automatically on startup
 
-- Registration works with validation.
-- Login returns a usable JWT.
-- A protected route or screen shows the welcome message using JWT auth.
+### Frontend
 
----
+The React app is built from `simple-auth-ui/Dockerfile` and is exposed on port `3000`.
 
-## Optional bonus
+The frontend is configured to call the backend API through the `VITE_API_URL` build argument.
 
-- Docker
-- Backend built using Go (or their frameworks)
-- Frontend built using React/Vue (or their frameworks)
-- Tests (unit or integration)
+### PostgreSQL
 
-This keeps the scope tight: just registration, login, and a protected “Hello [email]” flow.
+A PostgreSQL 18 container is created with:
+
+- database: `${DB_DATABASE}`
+- user: `${DB_USER}`
+- password: `${DB_PASSWORD}`
+
+The database is mounted to a Docker volume named `pgdata` and is exposed on host port `5434`.
+
+## Stop the Project
+
+```bash
+docker compose down
+```
+
+To remove the database volume as well:
+
+```bash
+docker compose down -v
+```
+
+## Local Development Notes
+
+If you want to run the backend outside Docker, make sure your machine has the .NET 10 SDK installed and configure the same environment variables in your shell or user-secrets setup.
+
+## License
+
+This project is intended for learning and local development purposes.

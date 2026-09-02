@@ -83,7 +83,10 @@ export default function Restricted() {
                 }
             } catch (err) {
                 console.error('Failed to validate authentication:', err)
-                setError('Unable to connect to the server.')
+                // setError('Unable to connect to the server.')
+
+                setTimeout(() => navigate('/login'), 1500)
+
             } finally {
                 setLoading(false)
             }
