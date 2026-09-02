@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useNavigate, Link, redirect } from 'react-router'
+import { useNavigate, Link } from 'react-router'
 
-const API_URL = import.meta.env.VITE_API_URL ?? 'https://localhost:5001'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
 
 type FormState = {
     email: string
@@ -19,6 +19,8 @@ export default function Register() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
+
+    console.log('API_URL:', API_URL)
 
     const handleChange = (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((prev) => ({ ...prev, [field]: e.target.value }))

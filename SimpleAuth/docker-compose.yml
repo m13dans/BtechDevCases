@@ -7,7 +7,7 @@
       dockerfile: SimpleAuthAPI/Dockerfile
     ports:
       - 5000:8080
-      - 5001:8081
+      # - 5001:8081
     environment:
       - ConnectionStrings__Database=Host=simpleauthdb;Port=5432;Database=${DB_DATABASE};Username=${DB_USER};Password=${DB_PASSWORD}
       - Jwt__Secret=${JWT_SECRET}
@@ -25,12 +25,13 @@
     image: simpleauth-frontend
     container_name: simpleauth-frontend
     build:
-      context: ../simple-auth-ui
+      context: ./simple-auth-ui
       args:
-        VITE_API_URL: https://localhost:5001
+        VITE_API_URL: http://localhost:5000
+        # VITE_API_URL: https://localhost:5001
     ports:
       - "3000:3000"
-      - "4000:4000"
+      # - "4000:4000"
     depends_on:
       - simpleauthapi
 
