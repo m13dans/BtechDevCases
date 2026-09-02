@@ -24,7 +24,7 @@ public class AuthService(IAuthRepository authRepo, IConfiguration configuration)
                 new Claim(ClaimTypes.NameIdentifier, user_id.ToString()),
                 new Claim(ClaimTypes.Email, email)
             ]),
-            Expires = DateTime.UtcNow.AddSeconds(15),
+            Expires = DateTime.UtcNow.AddMinutes(15),
             SigningCredentials = credentials,
             Issuer = configuration["Jwt:Issuer"],
             Audience = configuration["Jwt:Audience"]

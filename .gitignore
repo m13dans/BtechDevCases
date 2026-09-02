@@ -6,8 +6,8 @@
 # Docker containers
 .containers/
 
-# dotenv files
-.env
+# dotenv files not ignored for simplycity
+# .env
 
 # User-specific files
 *.rsuser
