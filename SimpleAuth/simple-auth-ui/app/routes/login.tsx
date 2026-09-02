@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router'
 
-const API_URL = import.meta.env.VITE_API_URL ?? 'https://localhost:5001'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
 
 type FormState = {
     email: string

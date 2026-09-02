@@ -26,13 +26,15 @@ export default function Restricted() {
             }
 
             try {
-                const response = await fetch(`${API_URL}/api/restricted`, {
+                const response = await fetch(`${API_URL}/api/auth/restricted`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 })
+
+                console.log('Response from restricted endpoint:', response)
 
                 if (response.status === 401) {
                     localStorage.removeItem('token')

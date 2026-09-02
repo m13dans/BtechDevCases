@@ -71,12 +71,13 @@ app.UseCors(o =>
 {
     if (app.Environment.IsDevelopment())
     {
-        o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("X-New-Access-Token");
     }
+
     else
     {
         o.WithOrigins(builder.Configuration["Frontend:Site"]!)
-            .AllowAnyHeader().AllowAnyMethod();
+            .AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("X-New-Access-Token");
     }
 });
 
