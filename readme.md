@@ -61,11 +61,17 @@ FRONTEND_SITE=http://localhost:3000
 
 ## Run with Docker Compose
 
+Simply clone the repository
+```bash
+git clone https://github.com/m13dans/BtechDevCases.git
+```
+open the folder
+
 From the project root folder:
 
 ```bash
 cd SimpleAuth
-docker compose --env-file .env up --build
+docker compose up --build
 ```
 
 This will start the following services:
