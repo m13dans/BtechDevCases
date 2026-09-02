@@ -33,7 +33,7 @@ This project implements a basic authentication flow with user registration, logi
 
 ## Required Environment Variables
 
-Create a `.env` file inside the `SimpleAuth` directory before running Docker Compose.
+The `.env` file is included in the repository inside the `SimpleAuth` for simplicity but you can change it following this structure.
 
 Example:
 
