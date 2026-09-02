@@ -1,0 +1,6 @@
+@SimpleAuthAPI_HostAddress = https://localhost:32781
+
+GET {{SimpleAuthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,60 @@
+﻿services:
+  simpleauthapi:
+    image: ${DOCKER_REGISTRY-}simpleauthapi
+    container_name: simpleauthapi
+    build:
+      context: .
+      dockerfile: SimpleAuthAPI/Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+    environment:
+      - ConnectionStrings__Database=Host=simpleauthdb;Port=5432;Database=${DB_DATABASE};Username=${DB_USER};Password=${DB_PASSWORD}
+      - Jwt__Secret=${JWT_SECRET}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - Frontend__Site=${FRONTEND_SITE}
+    depends_on:
+      simpleauthdb:
+        condition: service_healthy
+    restart: always
+    networks:
+      - "default"
+
+  frontend:
+    image: simpleauth-frontend
+    container_name: simpleauth-frontend
+    build:
+      context: ../simple-auth-ui
+      args:
+        VITE_API_URL: https://localhost:5001
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    depends_on:
+      - simpleauthapi
+
+
+  simpleauthdb:
+    image: postgres:18-alpine
+    container_name: simpleauthdb
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 5434:5432
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s      
+    networks:
+      - "default"
+
+volumes:
+  pgdata:
+    driver: local
