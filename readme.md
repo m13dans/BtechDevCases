@@ -117,7 +117,3 @@ docker compose down -v
 ## Local Development Notes
 
 If you want to run the backend outside Docker, make sure your machine has the .NET 10 SDK installed and configure the same environment variables in your shell or user-secrets setup.
-
-## License
-
-This project is intended for learning and local development purposes.
